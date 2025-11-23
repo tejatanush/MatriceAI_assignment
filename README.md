@@ -134,38 +134,6 @@ You can see in this image ![LPR in one frame](https://github.com/tejatanush/Matr
 
 ---
 
-## 5. How to Fix the LPR Limitation (Path to Rectify)
-
-
-### LPR Strategy (Crucial Optimization)
-
-#### ✅ Current Approach (Prototype Stage)
-You run OCR on the entire vehicle crop.  
-This works, but may accidentally read text that is not a license plate  
-(e.g., “FedEx”, “Civic”, stickers, bumper text).
-
-#### ❗ The Issue
-- Running OCR on a full vehicle is computationally expensive  
-- OCR may extract unrelated text  
-- License plates are small → model needs focused region  
-- Leads to mismatches like wrong or partial numbers
-
-#### ⭐ Recommended Production Pipeline
-In a real “CityEye” system, the correct LPR pipeline is:
-
-1. Vehicle Detection (YOLO)  
-2. License Plate Detection (specialized YOLO model trained for rectangular plates)  
-3. OCR (PaddleOCR / EasyOCR)  
-   👉 Run ONLY on the tiny plate crop, not the full vehicle
-
-This significantly improves:
-- Accuracy  
-- Speed  
-- Reliability  
-- Reduces false-text detection  
-
-#### 🕒 Why It’s Not Used Here
-Due to the assignment's tight time limit , full LPR retraining or fine-tuning wasn't possible.
 
 #### 🛠 Future Improvement
 To achieve near-perfect LPR accuracy:
@@ -174,11 +142,11 @@ To achieve near-perfect LPR accuracy:
 - Add multi-frame OCR voting (consensus from multiple frames)  
 - Apply regex validation to reject invalid plate formats  
 
-This is the exact “path to rectify” the drawback.
+This is the exact path to rectify the drawback.
 
 ---
 
-## 6. Scaling — Handling 100+ Live Camera Feeds
+## 5. Scaling — Handling 100+ Live Camera Feeds
 
 ### A. Distributed Microservice Architecture
 1. Ingestion Workers  
@@ -222,4 +190,4 @@ The system balances:
 - Practical accuracy  
 - Scalable design  
 
-The main limitation is LPR accuracy, which can be greatly improved using the recommended production pipeline above.
+The main limitation is LPR accuracy, which can be greatly improved using the fine tuning and some more optimization techniques.
