@@ -126,7 +126,7 @@ During testing, the system sometimes extracted incorrect license numbers due to:
 - Skewed/angled plates  
 - Non-standard fonts  
 - Misreading characters (0/O, 1/I, 5/S etc.)
-You can see in this image ![LPR in one frame](https://raw.githubusercontent.com/<username>/<repo>/main/images/diagram.png)
+You can see in this image ![LPR in one frame](https://github.com/tejatanush/MatriceAI_assignment/blob/master/debug_lp_text.jpg)
 ### ❗ Reason:
 - EasyOCR was not specifically pretrained on the exact style of plates in the video.  
 - LP detector sometimes captures extra non-plate text.  
