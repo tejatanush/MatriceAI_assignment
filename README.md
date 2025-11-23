@@ -41,8 +41,7 @@ The system contains two major components:
 ---
 
 ### B. Query Agent (agent.py)
-
-# 🚦 CityEye: Video Metadata Intelligence Agent
+CityEye: Video Metadata Intelligence Agent
 
 **CityEye** is an intelligent SQL-powered video surveillance assistant designed to answer natural-language queries about vehicle and object metadata extracted from video streams.  
 This component forms the *analytics and query layer* of the overall VMS (Video Management System) pipeline.
@@ -57,6 +56,7 @@ The goal of this module is to:
   - “When did the red car appear?”
   - “Show all trucks with visible license plates.”
   - “Find the timestamp of a blue motorcycle.”
+- I had used ollama3 which is hosted locally in laptop.
 
 CityEye interprets queries, generates optimized SQL, executes it on the metadata DB, and provides clean professional answers.
 
@@ -69,7 +69,7 @@ CityEye interprets queries, generates optimized SQL, executes it on the metadata
 
 ### 📌 Summary of Data Flow
 
-Video → YOLO → LP Detector → OCR → JSON → SQLite → LLM → SQL → Answer
+Video → YOLO → LP Detector → OCR → JSON → SQLite → Qury → Agent  → LLM → Answer
 
 ---
 
@@ -107,6 +107,7 @@ Video → YOLO → LP Detector → OCR → JSON → SQLite → LLM → SQL → A
 ### Model Size
 - YOLOv8m = balanced accuracy & performance  
 - Smaller LP detector = faster inference
+- Yolov1X.pt huggingface public model for recognizing number plates.
 
 ### OCR
 - EasyOCR is fast but slightly less accurate  
@@ -114,9 +115,7 @@ Video → YOLO → LP Detector → OCR → JSON → SQLite → LLM → SQL → A
 
 ### LLM Query Parsing
 - Llama3 is fast  
-- Occasionally imperfect SQL → solved via fallback logic
-
----
+- Use SQLDatabase from langchain to make operations on database by LLM itself without human interaction and check in loop process for errors.
 
 ## 4. Drawbacks / Limitations
 
@@ -127,7 +126,7 @@ During testing, the system sometimes extracted incorrect license numbers due to:
 - Skewed/angled plates  
 - Non-standard fonts  
 - Misreading characters (0/O, 1/I, 5/S etc.)
-
+You can see in this image ![LPR in one frame](https://raw.githubusercontent.com/<username>/<repo>/main/images/diagram.png)
 ### ❗ Reason:
 - EasyOCR was not specifically pretrained on the exact style of plates in the video.  
 - LP detector sometimes captures extra non-plate text.  
@@ -166,7 +165,7 @@ This significantly improves:
 - Reduces false-text detection  
 
 #### 🕒 Why It’s Not Used Here
-Due to the assignment's tight time limit (4–6 hours), full LPR retraining or fine-tuning wasn't possible.
+Due to the assignment's tight time limit , full LPR retraining or fine-tuning wasn't possible.
 
 #### 🛠 Future Improvement
 To achieve near-perfect LPR accuracy:
