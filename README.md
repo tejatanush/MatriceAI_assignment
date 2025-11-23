@@ -22,12 +22,13 @@ The system contains two major components:
    - Persons  
    YOLO assigns track IDs to follow the same object across frames.
 
-3. License Plate Detection + OCR  
-   - A YOLO-based license plate detector extracts plate regions  
+3. License Plate Detection + OCR
+   - A YOLO-based license plate detector extracts plate regions
+   - I am using the model from Hugging Face  
    - Only the plate crop is sent to EasyOCR  
    - OCR returns alphanumeric text
 
-4. Metadata Extraction  
+5. Metadata Extraction  
    For each detected object:  
    - Timestamp  
    - Object type  
@@ -41,15 +42,28 @@ The system contains two major components:
 
 ### B. Query Agent (agent.py)
 
-5. Metadata → SQLite Database  
-   Metadata is loaded into an in-memory SQLite table.
+# 🚦 CityEye: Video Metadata Intelligence Agent
 
-6. Natural Language Query → SQL  
-   - If Ollama (Llama3) is running → LLM converts natural language to SQL  
-   - Else → rule-based fallback logic is used
+**CityEye** is an intelligent SQL-powered video surveillance assistant designed to answer natural-language queries about vehicle and object metadata extracted from video streams.  
+This component forms the *analytics and query layer* of the overall VMS (Video Management System) pipeline.
 
-7. SQL Execution → Final Answer  
-   The query is executed and results are returned to the user.
+---
+## 📌 Overview
+The goal of this module is to:
+
+- Convert raw per-frame detection JSON into a structured **SQLite database**  
+- Expose that database to an **LLM-based agent** using LangChain  
+- Allow the user to ask **natural-language questions** such as:
+  - “When did the red car appear?”
+  - “Show all trucks with visible license plates.”
+  - “Find the timestamp of a blue motorcycle.”
+
+CityEye interprets queries, generates optimized SQL, executes it on the metadata DB, and provides clean professional answers.
+
+---
+
+## 🧱 Architecture
+
 
 ---
 
